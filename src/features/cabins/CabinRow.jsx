@@ -1,10 +1,33 @@
 /* eslint-disable react/prop-types */
+// React Query
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+// Styles Components
 import styled from "styled-components";
 // Utils
 import { formatCurrency } from "../../utils/helpers";
+// API
+import { deleteCabin } from "../../services/apiCabins";
 
 const CabinRow = ({ cabin }) => {
-  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+  const {
+    id: cabinId,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    image,
+  } = cabin;
+  const queryClient = useQueryClient();
+
+  const { isPending: isDeleting, mutate } = useMutation({
+    mutationFn: deleteCabin,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cabins"] });
+    },
+    onError: (err) => {
+      console.log(err.message);
+    },
+  });
 
   return (
     <TableRow role="row">
@@ -13,7 +36,9 @@ const CabinRow = ({ cabin }) => {
       <div>Fits up to {maxCapacity}</div>
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
-      <button>Delete</button>
+      <button onClick={() => mutate(cabinId)} disabled={isDeleting}>
+        Delete
+      </button>
     </TableRow>
   );
 };

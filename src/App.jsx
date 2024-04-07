@@ -41,7 +41,7 @@ const App = () => {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );

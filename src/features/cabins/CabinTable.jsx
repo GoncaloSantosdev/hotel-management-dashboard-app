@@ -19,6 +19,7 @@ const CabinTable = () => {
   });
 
   if (isPending) return <Spinner />;
+  if (error) console.log(error);
 
   return (
     <Table role="table">
