@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
 // React Query
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-// Styles Components
+// Styled Components
 import styled from "styled-components";
 // Utils
 import { formatCurrency } from "../../utils/helpers";
 // API
 import { deleteCabin } from "../../services/apiCabins";
+// Toaster
+import { toast } from "react-hot-toast";
 
 const CabinRow = ({ cabin }) => {
   const {
@@ -22,10 +24,12 @@ const CabinRow = ({ cabin }) => {
   const { isPending: isDeleting, mutate } = useMutation({
     mutationFn: deleteCabin,
     onSuccess: () => {
+      toast.success("Cabin successfully deleted!");
+
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
     },
     onError: (err) => {
-      console.log(err.message);
+      toast.error(err.message);
     },
   });
 
